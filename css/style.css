@@ -1,25 +1,24 @@
-body{
+body {
     font-family: "Montserrat", sans-serif;
 }
 
-div.my-carousel-container{
+div.my-carousel-container {
     min-height: 700px;
-    min-width:800px ;
-    background-color: aquamarine;
+    min-width: 800px;
 }
 
-div.my-carousel-images{
+/* div.my-carousel-images {
     background-color: cadetblue;
     min-height: 540px;
-}
+} */
 
-div.my-thumbnails{
+div.my-thumbnails {
     background-color: violet;
     min-height: 160px;
 }
 
 div.my-previous,
-div.my-next{
+div.my-next {
     height: 40px;
     width: 40px;
     border-radius: 50%;
@@ -31,24 +30,71 @@ div.my-next{
     cursor: pointer;
 }
 
-div.my-previous{
+div.my-previous {
     left: 1rem;
 }
 
-div.my-next{
+div.my-next {
     right: 1rem;
 }
 
-div.my-previous > span::after{
+div.my-previous>span::after {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     content: "\f7fb";
     line-height: 30px;
 }
 
-div.my-next > span::after{
+div.my-next>span::after {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     content: "\f520";
     line-height: 30px;
+}
+
+
+/* modifica css */
+
+div.my-carousel-images .item {
+    position: relative;
+    display: none;
+}
+
+
+div.my-carousel-images .item.active {
+    display: block;
+}
+
+div.my-carousel-images img {
+    height: 100%;
+    width: 100%;
+    max-height: 500px;
+}
+
+div.my-carousel-images .item-description {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    color: white;
+    text-align: end;
+}
+
+div .my-thumbnails {
+    display: flex;
+    overflow-y: auto;
+}
+
+div.thumbnail {
+    flex-basis: 20%;
+    filter: brightness(.4);
+}
+
+div.thumbnail img {
+    height: 100%;
+    width: 100%;
+}
+
+div.my-thumbnails .thumbnail.active {
+    filter: brightness(1);
+    border: 3px rgb(197, 197, 197) solid;
 }
