@@ -75,7 +75,6 @@ const thumbnailsElement = document.querySelector('div .my-thumbnails');
 // lo aggiungo al contenuto già presente (i bottoni prev e next)
 thumbnailsElement.innerHTML += thumbnailsContent;
 
-
 // inizializzo gli elementi che voglio visualizzare in active per primi
 let activeElement = 2;
 
@@ -86,15 +85,40 @@ document.getElementsByClassName('item')[activeElement].classList.add('active');
 document.getElementsByClassName('thumbnail')[activeElement].classList.add('active');
 
 
+function switchToImage(carouselSelector, thumbnailSelector, activeElement, elementToHide) {
+    // rimuove dagli elementi coinvolti le classi active
+    document.getElementsByClassName(carouselSelector)[elementToHide].classList.remove('active');
+    document.getElementsByClassName(thumbnailSelector)[elementToHide].classList.remove('active');
+
+    // infine aggiunge ai nuovi elementi selezionati la classe active
+    document.getElementsByClassName(carouselSelector)[activeElement].classList.add('active');
+    document.getElementsByClassName(thumbnailSelector)[activeElement].classList.add('active');
+};
+
+// recupero l'elemento sul quale voglio applicare il comportamento "next"
+const next = document.querySelector('div.my-next');
+
+// gli aggiungo un event listener con una funzione anonima che
+next.addEventListener('click', function () {
+    //assegno un elemnto gli elementi che voglio visualizzare in active
+    let oldElement = activeElement;
+    // fa un controllo sul raggiungimento dell'ultimo elemento
+    if (activeElement === imageRicca.length - 1) {
+        activeElement = 0;
+    } else {
+        activeElement++;
+    }
+    //assegno la funzione
+    switchToImage('item', 'thumbnail', activeElement, oldElement);
+});
+
 // recupero l'elemento sul quale voglio applicare il comportamento "previous"
 const prev = document.querySelector('div.my-previous');
 
 // gli aggiungo un event listener con una funzione anonima che
 prev.addEventListener('click', function () {
-    // rimuove dagli elementi coinvolti le classi active
-    document.getElementsByClassName('item')[activeElement].classList.remove('active');
-    document.getElementsByClassName('thumbnail')[activeElement].classList.remove('active');
-
+    //assegno un elemnto gli elementi che voglio visualizzare in active
+    let oldElement = activeElement;
     // fa un controllo sul raggiungimento dell'ultimo elemento
     if (activeElement === 0) {
         activeElement = imageRicca.length - 1;
@@ -102,29 +126,36 @@ prev.addEventListener('click', function () {
         activeElement--;
     }
 
-    // infine aggiunge ai nuovi elementi selezionati la classe active
-    document.getElementsByClassName('item')[activeElement].classList.add('active');
-    document.getElementsByClassName('thumbnail')[activeElement].classList.add('active');
+    //assegno la funzione
+    switchToImage('item', 'thumbnail', activeElement, oldElement);
 });
 
 
-// recupero l'elemento sul quale voglio applicare il comportamento "next"
-const next = document.querySelector('div.my-next');
+//assegno un variabile il booleano
+let isForwardScroll = true;
 
-// gli aggiungo un event listener con una funzione anonima che
-next.addEventListener('click', function () {
-    // rimuove dagli elementi coinvolti le classi active
-    document.getElementsByClassName('item')[activeElement].classList.remove('active');
-    document.getElementsByClassName('thumbnail')[activeElement].classList.remove('active');
 
-    // fa un controllo sul raggiungimento dell'ultimo elemento
-    if (activeElement === imageRicca.length - 1) {
-        activeElement = 0;
+//inserisco dei nuovi bottoni
+document.getElementById('my-after-carousel').innerHTML += `
+<button id="my-button" class="btn btn-primary">Inverti l\'ordine di scorrimento</button>
+<button id="my-stop-button" class="btn btn-primary">Interrompi lo scorrimento</button>`;
+
+// inserisco ad un bottone che fa scrollare
+document.getElementById('my-button').addEventListener('click', function () {
+    isForwardScroll = !isForwardScroll;
+});
+
+//attraverso l'uso delle timing functions anche una funzionalità di scorrimento
+let autoScroll = setInterval(function () {
+    if (isForwardScroll) {
+        next.click();
     } else {
-        activeElement++;
+        prev.click();
     }
+}, 3000);
 
-    // infine aggiunge ai nuovi elementi selezionati la classe active
-    document.getElementsByClassName('item')[activeElement].classList.add('active');
-    document.getElementsByClassName('thumbnail')[activeElement].classList.add('active');
+
+//bottone che blocca lo scorrrimento
+document.getElementById('my-stop-button').addEventListener('click', function () {
+    clearInterval(autoScroll);
 });
